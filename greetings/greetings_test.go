@@ -1,8 +1,8 @@
 package greetings
 
 import (
+	"encoding/json"
 	"regexp"
-	"strings"
 	"testing"
 )
 
@@ -39,9 +39,17 @@ func TestHellosNames(t *testing.T) {
 
 	msgs, err := Hellos(names)
 
+	namesJson, _ := json.Marshal(names)
+
 	for name, want := range wants {
 		if !want.MatchString(msgs[name]) || err != nil {
-			t.Fatalf(`Hellos([]string{%v}) = %q, %v, want match for %#q, nil`, strings.Join(names, ", "), msgs[name], err, want)
+			t.Fatalf(
+				`Hellos([]string{%v}) = %q, %v, want match for %#q, nil`,
+				string(namesJson)[1:len(string(namesJson))-1],
+				msgs[name],
+				err,
+				want,
+			)
 		}
 	}
 }
